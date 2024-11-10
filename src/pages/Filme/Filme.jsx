@@ -20,13 +20,13 @@ function Filme() {
                     language: "pt-br",
                 }
             })
-            .then(response => {
-                setFilme(response.data)
-                setLoading(false)
-            })
-            .catch(err => {
-                console.log("filme não encotrado")
-            })
+                .then(response => {
+                    setFilme(response.data)
+                    setLoading(false)
+                })
+                .catch(err => {
+                    console.log("filme não encotrado")
+                })
         }
 
         loadFilme()
@@ -37,7 +37,7 @@ function Filme() {
     }, [])
 
 
-    if(loading) {
+    if (loading) {
         return (
             <div className="filme-info">
                 <h1>Carregando detalhes...</h1>
@@ -52,6 +52,14 @@ function Filme() {
             <h3>Sinopse</h3>
             <span>{filme.overview}</span>
             <strong>Avaliação: {filme.vote_average} / 10</strong>
+            <div className="area-button">
+                 <button>Salvar</button>
+                 <button>
+                    <a href="#">
+                        Trailer
+                    </a>
+                 </button>
+            </div>
         </div>
     )
 }
