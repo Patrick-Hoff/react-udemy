@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
 
 import "./Filme.css"
 
@@ -8,6 +8,8 @@ import api from "../../services/api"
 function Filme() {
 
     const { id } = useParams()
+    const navigate = useNavigate()
+
     const [filme, setFilme] = useState({})
     const [loading, setLoading] = useState(true);
 
@@ -25,7 +27,8 @@ function Filme() {
                     setLoading(false)
                 })
                 .catch(err => {
-                    console.log("filme não encotrado")
+                    navigate("/", { replace: true })
+                    return;
                 })
         }
 
@@ -34,8 +37,23 @@ function Filme() {
         return () => {
             console.log('Componente foi desmontado')
         }
-    }, [])
+    }, [navigate, id])
 
+    function filmesFavoritos() {
+        const minhaLista = localStorage.getItem("@primeflix")
+
+        let filmeSalvos = JSON.parse(minhaLista) || [];
+
+        const hasFilme = filmeSalvos.some((filmesSalvos) => filmesSalvos.id === filme.id )
+
+        if(hasFilme) {
+            alert("ESSE FILME JÁ ESTA NA LISTA...")
+            return;
+        }
+
+        filmeSalvos.push(filme);
+        localStorage.setItem("@primeflix", JSON.stringify(filmeSalvos))
+    }
 
     if (loading) {
         return (
@@ -53,12 +71,12 @@ function Filme() {
             <span>{filme.overview}</span>
             <strong>Avaliação: {filme.vote_average} / 10</strong>
             <div className="area-button">
-                 <button>Salvar</button>
-                 <button>
+                <button onClick={filmesFavoritos}>Salvar</button>
+                <button>
                     <a href="#">
                         Trailer
                     </a>
-                 </button>
+                </button>
             </div>
         </div>
     )
