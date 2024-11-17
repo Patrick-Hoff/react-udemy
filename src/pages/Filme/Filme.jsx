@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 
+import { toast} from "react-toastify"
+
 import "./Filme.css"
 
 import api from "../../services/api"
@@ -47,13 +49,13 @@ function Filme() {
         const hasFilme = filmeSalvos.some((filmesSalvos) => filmesSalvos.id === filme.id )
 
         if(hasFilme) {
-            alert("ESSE FILME JÁ ESTA NA LISTA...")
+            toast.warn("Esse filme já está na sua lista!")
             return;
         }
 
         filmeSalvos.push(filme);
         localStorage.setItem("@primeflix", JSON.stringify(filmeSalvos))
-        alert("Filme Registrado com sucesso...")
+        toast.success("Filmes salvo com sucesso!")
     }
 
     if (loading) {
@@ -74,7 +76,7 @@ function Filme() {
             <div className="area-button">
                 <button onClick={filmesFavoritos}>Salvar</button>
                 <button>
-                    <a href="#">
+                    <a target="blank" href={`https://youtube.com/results?search_query=${filme.title}`}>
                         Trailer
                     </a>
                 </button>
